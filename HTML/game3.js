@@ -4,7 +4,7 @@ window.onload(function() {
 		Crafty.debugBar.show();
 	});	
 
-	/*
+	
 	alert("BP 1");
 	
 	
@@ -17,5 +17,5 @@ window.onload(function() {
 	var iso = Crafty.isometric.size(32);
 	
 	iso.place(2,1,0,Crafty.e('2D, DOM, Color').color('red').attr({w: 32, h: 32}));
-	*/
+	
 });

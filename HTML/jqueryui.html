@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Button - Default functionality</title>
+  <link rel="stylesheet" href="jquery-ui-1.10.4.sunny\jquery-ui-1.10.4.custom\css\sunny\jquery-ui-1.10.4.custom.css">
+  <script src="jquery-ui-1.10.4.sunny\jquery-ui-1.10.4.custom\js\jquery-1.10.4.js"></script>
+  <script src="jquery-ui-1.10.4.sunny\jquery-ui-1.10.4.custom\js\jquery-ui-1.10.4.custom.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "input[type=submit], a, button" )
+      .button()
+      .click(function( event ) {
+        event.preventDefault();
+		text="what?";
+      });
+  });
+  </script>
+</head>
+<body>
+ 
+ 
+<button>A button element</button>
+ 
+ 
+<input type="submit" value="A submit button">
+ 
+<a href="#">An anchor</a>
+ 
+ 
+</body>
+</html>
