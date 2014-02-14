@@ -2,31 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>jQuery UI Button - Default functionality</title>
-  <link rel="stylesheet" href="jquery-ui-1.10.4.sunny\jquery-ui-1.10.4.custom\css\sunny\jquery-ui-1.10.4.custom.css">
-  <script src="jquery-ui-1.10.4.sunny\jquery-ui-1.10.4.custom\js\jquery-1.10.4.js"></script>
-  <script src="jquery-ui-1.10.4.sunny\jquery-ui-1.10.4.custom\js\jquery-ui-1.10.4.custom.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
+  <title>KirkQuery</title>
+	<link href="jquery-ui-1.10.4.sunny/css/sunny/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="jquery-ui-1.10.4.sunny/js/jquery-1.10.2.js"></script>
+	<script src="jquery-ui-1.10.4.sunny/js/jquery-ui-1.10.4.custom.js"></script>
   <script>
-  $(function() {
-    $( "input[type=submit], a, button" )
-      .button()
-      .click(function( event ) {
-        event.preventDefault();
-		text="what?";
-      });
-  });
+	$(function() {
+	  
+	  var player = {
+		inventory: [],
+		inv_limit: 4
+		};
+	  
+	  var item1 = {name: "Sword"};
+	  var item2 = {name: "Bow"};	  
+	  
+	  //item
+	  player.inventory.push(item1);
+	  player.inventory.push(item2);
+
+	  var list = function(array) {
+			var string = "";
+			for (var i=0; i < array.length; i++)
+				string+=array[i].name + " ";
+			return string;
+		};
+	  
+	   $( "#open_inv" )
+			.button()
+			.click(function( event ) {
+			event.preventDefault();		
+	
+			if ( $("#inv_window").length === 0)
+			{
+				
+				  jQuery("<div/>", {
+					id: "inv_window",
+					title: "Inventory",
+				  }).appendTo("body");
+		
+				$( "#inv_window" ).dialog({
+				  autoOpen: false,
+				  show: {
+					effect: "clip",
+					duration: 250
+				  },
+				  hide: {
+					effect: "clip",
+					duration: 250
+				  }
+				});
+				invopen = true;
+			}
+	
+			$( "#inv_window" ).text(list(player.inventory));
+			$( "#inv_window" ).dialog( "open" );		  
+		  });
+		  
+		$( "#open_char" )
+			.button()
+			.click(function( event ) {
+			event.preventDefault();		
+	
+			if ( $("#char_window").length === 0)
+			{
+				
+				  jQuery("<div/>", {
+					id: "char_window",
+					title: "Character",
+				  }).appendTo("body");
+		
+				$( "#char_window" ).dialog({
+				  autoOpen: false,
+				  show: {
+					effect: "clip",
+					duration: 250
+				  },
+				  hide: {
+					effect: "clip",
+					duration: 250
+				  }
+				});
+				invopen = true;
+			}
+	
+			//$( "#char_window" ).text(list(player.inventory));
+			$( "#char_window" ).dialog( "open" );		  
+		  });		
+	 
+	});
   </script>
 </head>
 <body>
  
  
-<button>A button element</button>
- 
- 
-<input type="submit" value="A submit button">
- 
-<a href="#">An anchor</a>
+<button id="open_inv">Inventory</button>
+<button id="open_char">Character</button>
+
  
  
 </body>

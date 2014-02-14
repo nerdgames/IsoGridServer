@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Sortable - Default functionality</title>
+	<link href="jquery-ui-1.10.4.sunny/css/sunny/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="jquery-ui-1.10.4.sunny/js/jquery-1.10.2.js"></script>
+	<script src="jquery-ui-1.10.4.sunny/js/jquery-ui-1.10.4.custom.js"></script>
+  <script>
+  $(function() {
+    $( "input[type=submit], a, button" )
+      .button()
+      .click(function( event ) {
+        event.preventDefault();
+      });
+  });
+  </script>
+</head>
+<body>
+ 
+<button>A button element</button>
+ 
+<input type="submit" value="A submit button">
+ 
+<a href="#">An anchor</a>
+ 
+ 
+</body>
+</html>
