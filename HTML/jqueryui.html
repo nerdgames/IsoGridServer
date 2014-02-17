@@ -2,93 +2,226 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>KirkQuery</title>
+  <title>Quest of EarthSea</title>
 	<link href="jquery-ui-1.10.4.sunny/css/sunny/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 	<script src="jquery-ui-1.10.4.sunny/js/jquery-1.10.2.js"></script>
 	<script src="jquery-ui-1.10.4.sunny/js/jquery-ui-1.10.4.custom.js"></script>
+	
+<style>
+	#equ_list {
+		float: none;
+		background-color: red;
+		font-size:20px;
+		border-radius:5px;
+		text-align:left;
+	}
+	#inv_list {
+		float: none;
+		background-color: grey;
+		font-size:20px;
+		border-radius:5px;
+		text-align:left;
+	}
+</style>
+
   <script>
 	$(function() {
 	  
+	  
+	  var debug_num = 0;
+	  
 	  var player = {
 		inventory: [],
-		inv_limit: 4
+		inv_limit: 8
 		};
 	  
-	  var item1 = {name: "Sword"};
-	  var item2 = {name: "Bow"};	  
+	  var item1 = {
+		type: "weapon",
+		name: "Steel_Sword",
+		toHit: 0,
+		toDam: 0,
+		baseDam: 3,
+//		img_src: "sword-icon.gif"
+		};
+	  var item2 = {
+		name: "Bow",
+		type: "weapon"
+		};
+		
+	  var item3 = {
+		type: "Armor",
+		name: "Platemail",
+		baseDef: 4
+		}; 
+		
+	var item4 = {
+		type: "Amulet",
+		name: "Amulet_of_Life",
+		addHP: 2
+		};
+		
+	  var item5 = {
+		type: "weapon",
+		name: "Glamdring",
+		toHit: 2,
+		toDam: 2,
+		baseDam: 8,
+//		img_src: "sword-icon.gif"
+		};		
 	  
 	  //item
 	  player.inventory.push(item1);
 	  player.inventory.push(item2);
+	  player.inventory.push(item3);	  
+	  player.inventory.push(item4);	  	  
+	  player.inventory.push(item5);		  
 
-	  var list = function(array) {
-			var string = "";
+	  //alert(Object.keys(item4));
+	  
+	  var retrieveTooltip = function(item) {
+		var tipstr = "";
+		var keys = Object.keys(item);
+		for (var i in keys) {
+			if (typeof item[keys[i]] !== 'string')
+				tipstr += keys[i] + ": " + item[keys[i]] + "|";
+			else
+				tipstr += keys[i] + ": " + item[keys[i]].split("_").join(" ") + "|";
+		}
+		return tipstr;
+	  }
+	  
+	  var UpdateInv = function(array) {
+		
+			//$("#inv_window").empty();
+			
 			for (var i=0; i < array.length; i++)
-				string+=array[i].name + " ";
-			return string;
+			{
+				if ( $("#" + array[i].name + "_itemTile").length === 0)
+				{
+					jQuery("<div/>", {
+						id: array[i].name + "_itemTile",
+						text: array[i].name.split("_").join(" "),
+						title: retrieveTooltip(array[i])
+					}).appendTo("#inv_list");
+				  
+					$( "#" + array[i].name + "_itemTile").height(30);
+					$( "#" + array[i].name + "_itemTile").width(140);
+					$( "#" + array[i].name + "_itemTile").tooltip({
+						content: function(callback) { 
+							callback($(this).prop('title').split("|").join("<br />"));
+						}
+					});
+				  
+					jQuery("<img/>", {
+						id: array[i].name+ "_img",
+						src: array[i].img_src
+					}).appendTo( "#" + array[i].name + "_itemTile");
+				}
+			}
+							
+			$("#inv_window").dialog("option","title","Inventory (" + player.inventory.length + "/" + player.inv_limit + ")");
 		};
 	  
 	   $( "#open_inv" )
 			.button()
 			.click(function( event ) {
-			event.preventDefault();		
-	
-			if ( $("#inv_window").length === 0)
-			{
-				
-				  jQuery("<div/>", {
-					id: "inv_window",
-					title: "Inventory",
-				  }).appendTo("body");
+				event.preventDefault();		
 		
-				$( "#inv_window" ).dialog({
-				  autoOpen: false,
-				  show: {
-					effect: "clip",
-					duration: 250
-				  },
-				  hide: {
-					effect: "clip",
-					duration: 250
-				  }
-				});
-				invopen = true;
-			}
-	
-			$( "#inv_window" ).text(list(player.inventory));
-			$( "#inv_window" ).dialog( "open" );		  
-		  });
+				if ( $("#inv_window").length === 0)
+				{
+					
+					  jQuery("<div/>", {
+						id: "inv_window",
+					  }).appendTo("body");
+			
+					jQuery("<ul/>", {
+						id: "equ_list",
+						text: "Equipped"
+					}).appendTo("#inv_window");				
+			
+					jQuery("<ul/>", {
+						id: "inv_list",
+						html: "Inventory Bag"
+					}).appendTo("#inv_window");
+									
+			
+					$("#inv_list").sortable({
+						connectWith: "#equ_list",
+					}).disableSelection();		
+
+					$("#equ_list").sortable({
+						connectWith: "#inv_list",
+					}).disableSelection();	
+			
+					$( "#inv_window" ).dialog({
+					  autoOpen: false,
+					  show: {
+						effect: "clip",
+						duration: 250
+					  },
+					  hide: {
+						effect: "clip",
+						duration: 250
+					  }
+					}).disableSelection();
+					invopen = true;
+				}	
+		
+				UpdateInv(player.inventory);
+				if ($( "#inv_window" ).dialog( "isOpen" ) === true)
+					$( "#inv_window" ).dialog( "close" );		  
+				else
+					$( "#inv_window" ).dialog( "open" );		  
+		});
 		  
 		$( "#open_char" )
 			.button()
 			.click(function( event ) {
-			event.preventDefault();		
-	
-			if ( $("#char_window").length === 0)
-			{
-				
-				  jQuery("<div/>", {
-					id: "char_window",
-					title: "Character",
-				  }).appendTo("body");
+				event.preventDefault();		
 		
-				$( "#char_window" ).dialog({
-				  autoOpen: false,
-				  show: {
-					effect: "clip",
-					duration: 250
-				  },
-				  hide: {
-					effect: "clip",
-					duration: 250
-				  }
-				});
-				invopen = true;
+				if ( $("#char_window").length === 0)
+				{
+					
+					  jQuery("<div/>", {
+						id: "char_window",
+						title: "Character",
+					  }).appendTo("body");
+			
+					$( "#char_window" ).dialog({
+					  autoOpen: false,
+					  show: {
+						effect: "clip",
+						duration: 250
+					  },
+					  hide: {
+						effect: "clip",
+						duration: 250
+					  }
+					});
+				}		
+
+				$( "char_window" ).sortable();
+				if ($( "#char_window" ).dialog( "isOpen" ) === true)
+					$( "#char_window" ).dialog( "close" );		  
+				else
+					$( "#char_window" ).dialog( "open" );		  
+		});	
+
+		
+		var RemoveFromInventory = function(idx) {
+			if (player.inventory.length !== 0) {
+				$("#" + player.inventory[0].name + "_itemTile").remove();		
+				player.inventory.shift();
+				$("#inv_window").dialog("option","title","Inventory (" + player.inventory.length + "/" + player.inv_limit + ")");
 			}
-	
-			//$( "#char_window" ).text(list(player.inventory));
-			$( "#char_window" ).dialog( "open" );		  
-		  });		
+		};
+		
+		$("#debug_button")
+			.button()
+			.click(function(event) {
+				event.preventDefault();
+				RemoveFromInventory(0);
+		});
 	 
 	});
   </script>
@@ -98,6 +231,7 @@
  
 <button id="open_inv">Inventory</button>
 <button id="open_char">Character</button>
+<button id="debug_button">Debug</button>
 
  
  
